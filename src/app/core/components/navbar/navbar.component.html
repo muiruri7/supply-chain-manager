@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/dashboard">Supply Chain Manager</a>
+    <button 
+      class="navbar-toggler" 
+      type="button" 
+      data-bs-toggle="collapse" 
+      data-bs-target="#navbarNav" 
+      aria-controls="navbarNav" 
+      aria-expanded="false" 
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav" *ngIf="user">
+      <ul class="navbar-nav me-auto">
+        <!-- Universal Dashboard link -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/dashboard">Dashboard</a>
+        </li>
+
+        <!-- Admin-specific links -->
+        <ng-container *ngIf="user?.role === 'Admin'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin">Admin Panel</a>
+          </li>
+          <!-- You can add additional Admin links as needed -->
+        </ng-container>
+
+        <!-- Warehouse Manager-specific links -->
+        <ng-container *ngIf="user?.role === 'Warehouse Manager'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/warehouse/inventory">Inventory</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/warehouse/orders">Orders</a>
+          </li>
+        </ng-container>
+
+        <!-- Supplier-specific links -->
+        <ng-container *ngIf="user?.role === 'Supplier'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/supplier/purchase-orders">Purchase Orders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/supplier/delivery-status">Delivery Status</a>
+          </li>
+        </ng-container>
+
+        <!-- Customer-specific links -->
+        <ng-container *ngIf="user?.role === 'Customer'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/my-orders">My Orders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/profile">Profile</a>
+          </li>
+        </ng-container>
+      </ul>
+      <span class="navbar-text me-3">
+        {{ user?.email }}
+      </span>
+      <button class="btn btn-outline-light" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</nav>

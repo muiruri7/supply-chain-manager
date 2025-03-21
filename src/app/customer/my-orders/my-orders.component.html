@@ -1,0 +1,72 @@
+<div class="container mt-5">
+  <h2>My Orders</h2>
+  
+  <!-- Filter Section -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form [formGroup]="filterForm" class="row g-3">
+        <div class="col-md-4">
+          <label for="statusFilter" class="form-label">Status</label>
+          <select id="statusFilter" formControlName="status" class="form-select">
+            <option value="">All</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Processing">Processing</option>
+            <option value="Shipped">Shipped</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="searchFilter" class="form-label">Search Order Number</label>
+          <input id="searchFilter" type="text" formControlName="search" class="form-control" placeholder="Enter order number">
+        </div>
+        <div class="col-md-4 align-self-end">
+          <button type="button" class="btn btn-secondary" (click)="clearFilters()">Clear Filters</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sort Buttons -->
+  <div class="mb-3">
+    <button class="btn btn-outline-primary me-2" (click)="sortOrders('orderNumber')">Sort by Order Number</button>
+    <button class="btn btn-outline-primary" (click)="sortOrders('orderDate')">Sort by Order Date</button>
+  </div>
+
+  <!-- Orders Table -->
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Order Number</th>
+        <th>Status</th>
+        <th>Order Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of pagedOrders">
+        <td>{{ order.id }}</td>
+        <td>{{ order.orderNumber }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.orderDate }}</td>
+      </tr>
+      <tr *ngIf="pagedOrders.length === 0">
+        <td colspan="4" class="text-center">No orders match the current filters.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination Controls -->
+  <nav *ngIf="totalPages > 1">
+    <ul class="pagination">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="goToPage(currentPage - 1)">Previous</a>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="currentPage === i + 1">
+        <a class="page-link" (click)="goToPage(i + 1)">{{ i + 1 }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="goToPage(currentPage + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>

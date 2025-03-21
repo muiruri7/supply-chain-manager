@@ -1,0 +1,51 @@
+<div class="container mt-5">
+  <h2>Delivery Status</h2>
+  
+  <!-- Filter Section -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Filter Deliveries</h5>
+      <form [formGroup]="filterForm" class="row g-3">
+        <div class="col-md-4">
+          <label for="statusFilter" class="form-label">Status</label>
+          <select id="statusFilter" formControlName="status" class="form-select">
+            <option value="">All</option>
+            <option value="In Transit">In Transit</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Delayed">Delayed</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="deliveryNumberFilter" class="form-label">Delivery Number</label>
+          <input id="deliveryNumberFilter" type="text" formControlName="deliveryNumber" class="form-control" placeholder="Search by delivery number">
+        </div>
+        <div class="col-md-4 align-self-end">
+          <button type="button" class="btn btn-secondary" (click)="clearFilters()">Clear Filters</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Deliveries Table -->
+  <table class="table table-bordered mt-4">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Delivery Number</th>
+        <th>Status</th>
+        <th>Expected Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let delivery of deliveries">
+        <td>{{ delivery.id }}</td>
+        <td>{{ delivery.deliveryNumber }}</td>
+        <td>{{ delivery.status }}</td>
+        <td>{{ delivery.expectedDate }}</td>
+      </tr>
+      <tr *ngIf="deliveries.length === 0">
+        <td colspan="4" class="text-center">No deliveries match the current filters.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,80 @@
+<div class="container mt-5">
+  <h2>Purchase Orders</h2>
+
+  <!-- Add New Purchase Order Form -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Add New Purchase Order</h5>
+      <form [formGroup]="addOrderForm" (ngSubmit)="onAddOrder()">
+        <div class="mb-3">
+          <label for="orderNumber" class="form-label">Order Number</label>
+          <input id="orderNumber" type="text" formControlName="orderNumber" class="form-control" placeholder="Enter order number">
+          <div *ngIf="addOrderForm.get('orderNumber')?.touched && addOrderForm.get('orderNumber')?.invalid" class="text-danger">
+            <small>Order number is required.</small>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="supplier" class="form-label">Supplier</label>
+          <input id="supplier" type="text" formControlName="supplier" class="form-control" placeholder="Enter supplier">
+          <div *ngIf="addOrderForm.get('supplier')?.touched && addOrderForm.get('supplier')?.invalid" class="text-danger">
+            <small>Supplier is required.</small>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="status" class="form-label">Status</label>
+          <input id="status" type="text" formControlName="status" class="form-control" placeholder="Enter status">
+          <div *ngIf="addOrderForm.get('status')?.touched && addOrderForm.get('status')?.invalid" class="text-danger">
+            <small>Status is required.</small>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Order</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Purchase Orders Table -->
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Order Number</th>
+        <th>Supplier</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of purchaseOrders">
+        <!-- Inline editing mode -->
+        <ng-container *ngIf="editingOrder?.id === order.id; else viewMode">
+          <td>{{ order.id }}</td>
+          <td>
+            <input type="text" class="form-control" [formControl]="editOrderNumber">
+          </td>
+          <td>
+            <input type="text" class="form-control" [formControl]="editSupplier">
+          </td>
+          <td>
+            <input type="text" class="form-control" [formControl]="editStatus">
+          </td>
+          <td>
+            <button class="btn btn-sm btn-success me-2" (click)="onSaveEdit()">Save</button>
+            <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">Cancel</button>
+          </td>
+        </ng-container>
+
+        <!-- View mode -->
+        <ng-template #viewMode>
+          <td>{{ order.id }}</td>
+          <td>{{ order.orderNumber }}</td>
+          <td>{{ order.supplier }}</td>
+          <td>{{ order.status }}</td>
+          <td>
+            <button class="btn btn-sm btn-primary me-2" (click)="onEditOrder(order)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="onDeleteOrder(order.id)">Delete</button>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+  </table>
+</div>

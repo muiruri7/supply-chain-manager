@@ -1,0 +1,80 @@
+<div class="container">
+  <h2>User Management</h2>
+  <p>Manage users by adding, editing, or removing them from the system.</p>
+
+  <!-- Form for adding a new user -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Add New User</h5>
+      <form [formGroup]="addUserForm" (ngSubmit)="onAddUser()">
+        <div class="mb-3">
+          <label for="newEmail" class="form-label">Email</label>
+          <input id="newEmail" type="email" formControlName="email" class="form-control" placeholder="Enter email">
+          <div *ngIf="addUserForm.get('email')?.touched && addUserForm.get('email')?.invalid" class="text-danger">
+            <small *ngIf="addUserForm.get('email')?.errors?.['required']">Email is required</small>
+            <small *ngIf="addUserForm.get('email')?.errors?.['email']">Enter a valid email</small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="newRole" class="form-label">Role</label>
+          <select id="newRole" formControlName="role" class="form-select">
+            <option value="">Select a role</option>
+            <option value="Admin">Admin</option>
+            <option value="Warehouse Manager">Warehouse Manager</option>
+            <option value="Supplier">Supplier</option>
+            <option value="Customer">Customer</option>
+          </select>
+          <div *ngIf="addUserForm.get('role')?.touched && addUserForm.get('role')?.invalid" class="text-danger">
+            <small>Role is required</small>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add User</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Table for displaying users -->
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <!-- If editing this user, show edit fields -->
+        <ng-container *ngIf="editingUser?.id === user.id; else viewMode">
+          <td>
+            <input type="email" [formControl]="editEmailControl" class="form-control">
+          </td>
+          <td>
+            <select class="form-select" [formControl]="editRoleControl">
+              <option value="Admin">Admin</option>
+              <option value="Warehouse Manager">Warehouse Manager</option>
+              <option value="Supplier">Supplier</option>
+              <option value="Customer">Customer</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-success me-2" (click)="onSaveEdit()">Save</button>
+            <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">Cancel</button>
+          </td>
+        </ng-container>
+
+        <!-- View mode for users -->
+        <ng-template #viewMode>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+          <td>
+            <button class="btn btn-sm btn-primary me-2" (click)="onEditUser(user)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="onDeleteUser(user.id)">Delete</button>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+  </table>
+</div>

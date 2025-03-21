@@ -1,0 +1,81 @@
+<div class="container mt-5">
+  <h2>Inventory Management</h2>
+
+  <!-- Add New Item Form -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Add New Inventory Item</h5>
+      <form [formGroup]="addItemForm" (ngSubmit)="onAddItem()">
+        <div class="mb-3">
+          <label for="productName" class="form-label">Product Name</label>
+          <input id="productName" type="text" formControlName="productName" class="form-control" placeholder="Enter product name">
+          <div *ngIf="addItemForm.get('productName')?.touched && addItemForm.get('productName')?.invalid" class="text-danger">
+            <small>Product name is required.</small>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="quantity" class="form-label">Quantity</label>
+          <input id="quantity" type="number" formControlName="quantity" class="form-control" placeholder="Enter quantity">
+          <div *ngIf="addItemForm.get('quantity')?.touched && addItemForm.get('quantity')?.invalid" class="text-danger">
+            <small *ngIf="addItemForm.get('quantity')?.errors?.['required']">Quantity is required.</small>
+            <small *ngIf="addItemForm.get('quantity')?.errors?.['min']">Quantity cannot be negative.</small>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="location" class="form-label">Location</label>
+          <input id="location" type="text" formControlName="location" class="form-control" placeholder="Enter location">
+          <div *ngIf="addItemForm.get('location')?.touched && addItemForm.get('location')?.invalid" class="text-danger">
+            <small>Location is required.</small>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Item</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Inventory Items Table -->
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Quantity</th>
+        <th>Location</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of inventoryItems">
+        <!-- If this item is being edited, show edit form controls -->
+        <ng-container *ngIf="editingItem?.id === item.id; else viewMode">
+          <td>{{ item.id }}</td>
+          <td>
+            <input type="text" class="form-control" [formControl]="editProductName">
+          </td>
+          <td>
+            <input type="number" class="form-control" [formControl]="editQuantity">
+          </td>
+          <td>
+            <input type="text" class="form-control" [formControl]="editLocation">
+          </td>
+          <td>
+            <button class="btn btn-sm btn-success me-2" (click)="onSaveEdit()">Save</button>
+            <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">Cancel</button>
+          </td>
+        </ng-container>
+      
+        <!-- View mode for the item -->
+        <ng-template #viewMode>
+          <td>{{ item.id }}</td>
+          <td>{{ item.productName }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.location }}</td>
+          <td>
+            <button class="btn btn-sm btn-primary me-2" (click)="onEditItem(item)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="onDeleteItem(item.id)">Delete</button>
+          </td>
+        </ng-template>
+      </tr>      
+    </tbody>
+  </table>
+</div>

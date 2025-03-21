@@ -1,0 +1,53 @@
+<div class="container mt-5">
+  <h1 class="mb-4">Admin Dashboard</h1>
+  <p>Welcome, Admin! Use the navigation within the admin panel to manage the system.</p>
+  
+  <!-- Summary Cards Section -->
+  <div class="row mb-4">
+    <!-- Total Users Card -->
+    <div class="col-md-4 mb-3">
+      <div class="card text-white bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">Total Users</h5>
+          <p class="card-text display-6">{{ totalUsers }}</p>
+        </div>
+      </div>
+    </div>
+    <!-- Total Inventory Items Card (Placeholder) -->
+    <div class="col-md-4 mb-3">
+      <div class="card text-white bg-success">
+        <div class="card-body">
+          <h5 class="card-title">Inventory Items</h5>
+          <p class="card-text display-6">{{ totalInventoryItems }}</p>
+        </div>
+      </div>
+    </div>
+    <!-- Total Orders Card (Placeholder) -->
+    <div class="col-md-4 mb-3">
+      <div class="card text-white bg-warning">
+        <div class="card-body">
+          <h5 class="card-title">Total Orders</h5>
+          <p class="card-text display-6">{{ totalOrders }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Navigation Links for Admin Tasks -->
+  <!-- <div class="btn-group mb-4" role="group">
+    <a [routerLink]="['/admin', 'users']" class="btn btn-outline-primary">User Management</a>
+  </div>  
+   -->
+  <!-- Child Routes Outlet -->
+  <router-outlet></router-outlet>
+  
+  <!-- System Overview Section -->
+  <div class="card mt-4">
+    <div class="card-body">
+      <h5 class="card-title">System Overview</h5>
+      <p class="card-text">
+        This section can include charts, graphs, or additional metrics providing a comprehensive view of the system's performance and status.
+      </p>
+    </div>
+  </div>
+</div>

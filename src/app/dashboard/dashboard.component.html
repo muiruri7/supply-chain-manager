@@ -1,0 +1,48 @@
+<div class="container mt-5">
+  <h1 class="mb-4">Welcome, {{ user?.email }}</h1>
+  
+  <!-- Common Dashboard Section -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Dashboard Overview</h5>
+      <p class="card-text">This is a summary of your account and recent activities.</p>
+    </div>
+  </div>
+
+  <!-- Role-specific content -->
+  <ng-container *ngIf="user?.role === 'Admin'">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Admin Panel</h5>
+        <p class="card-text">Access to user management, inventory control, and system logs.</p>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="user?.role === 'Warehouse Manager'">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Warehouse Overview</h5>
+        <p class="card-text">View inventory levels, orders, and manage shipments.</p>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="user?.role === 'Supplier'">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Supplier Dashboard</h5>
+        <p class="card-text">Monitor purchase orders, deliveries, and manage your profile.</p>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="user?.role === 'Customer'">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">My Orders</h5>
+        <p class="card-text">Track your orders and review order history.</p>
+      </div>
+    </div>
+  </ng-container>
+</div>
