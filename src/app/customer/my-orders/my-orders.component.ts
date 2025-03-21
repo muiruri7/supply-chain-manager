@@ -23,6 +23,8 @@ export class MyOrdersComponent implements OnInit {
 
   filteredOrders: Order[] = [];
   filterForm: FormGroup;
+  sortField: 'orderNumber' | 'orderDate' = 'orderNumber';
+  sortDirection: 'asc' | 'desc' = 'asc';
   // Pagination
   currentPage = 1;
   pageSize = 5;
@@ -58,6 +60,27 @@ export class MyOrdersComponent implements OnInit {
     this.calculateTotalPages();
   }
 
+  applySorting(): void {
+    this.filteredOrders.sort((a, b) => {
+      const fieldA = a[this.sortField].toLowerCase();
+      const fieldB = b[this.sortField].toLowerCase();
+      if (fieldA < fieldB) return this.sortDirection === 'asc' ? -1 : 1;
+      if (fieldA > fieldB) return this.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
+
+  onSort(field: 'orderNumber' | 'orderDate'): void {
+    if (this.sortField === field) {
+      // Toggle sort direction
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    this.applySorting();
+  }
+
   sortOrders(by: 'orderNumber' | 'orderDate'): void {
     this.filteredOrders.sort((a, b) => a[by].localeCompare(b[by]));
   }
@@ -83,5 +106,6 @@ export class MyOrdersComponent implements OnInit {
     this.filteredOrders = [...this.orders];
     this.currentPage = 1;
     this.calculateTotalPages();
+    this.applySorting();
   }
 }

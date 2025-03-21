@@ -25,10 +25,14 @@
     </div>
   </div>
 
-  <!-- Sort Buttons -->
+  <!-- Sort Controls -->
   <div class="mb-3">
-    <button class="btn btn-outline-primary me-2" (click)="sortOrders('orderNumber')">Sort by Order Number</button>
-    <button class="btn btn-outline-primary" (click)="sortOrders('orderDate')">Sort by Order Date</button>
+    <button class="btn btn-outline-primary me-2" (click)="onSort('orderNumber')">
+      Sort by Order Number ({{ sortField === 'orderNumber' ? sortDirection : '' }})
+    </button>
+    <button class="btn btn-outline-primary" (click)="onSort('orderDate')">
+      Sort by Order Date ({{ sortField === 'orderDate' ? sortDirection : '' }})
+    </button>
   </div>
 
   <!-- Orders Table -->

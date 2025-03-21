@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService, Notification } from '../../services/notification.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,12 +10,30 @@ import { AuthService } from '../../services/auth.service';
 })
 export class NavbarComponent implements OnInit {
   user: any = null;
+  notifications: Notification[] = [];
+  showNotifications = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private notifService: NotificationService
+  ) {}
 
   ngOnInit(): void {
-    // Retrieve the current user from the authentication service.
     this.user = this.authService.getUser();
+
+    // Subscribe to notifications
+    this.notifService.notifications$.subscribe(notif => {
+      this.notifications.push(notif);
+      // Optionally, limit the number of notifications or auto-clear after a delay.
+    });
+    
+    // Start a simulated notification for demo purposes
+    this.notifService.simulateNotification();
+  }
+
+  toggleNotifications(): void {
+    this.showNotifications = !this.showNotifications;
   }
 
   logout(): void {
