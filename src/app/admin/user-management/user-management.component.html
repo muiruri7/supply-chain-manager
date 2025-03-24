@@ -15,7 +15,6 @@
             <small *ngIf="addUserForm.get('email')?.errors?.['email']">Enter a valid email</small>
           </div>
         </div>
-
         <div class="mb-3">
           <label for="newRole" class="form-label">Role</label>
           <select id="newRole" formControlName="role" class="form-select">
@@ -29,7 +28,6 @@
             <small>Role is required</small>
           </div>
         </div>
-
         <button type="submit" class="btn btn-primary">Add User</button>
       </form>
     </div>
@@ -49,7 +47,7 @@
         <!-- If editing this user, show edit fields -->
         <ng-container *ngIf="editingUser?.id === user.id; else viewMode">
           <td>
-            <input type="email" [formControl]="editEmailControl" class="form-control">
+            <input type="email" class="form-control" [formControl]="editEmailControl">
           </td>
           <td>
             <select class="form-select" [formControl]="editRoleControl">

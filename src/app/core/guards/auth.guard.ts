@@ -8,22 +8,30 @@ import { AuthService } from '../services/auth.service';
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const user = this.authService.getUser();
-
     if (!user) {
-      // Not logged in, redirect to login.
       this.router.navigate(['/login']);
       return false;
     }
-
-    const allowedRoles = next.data['roles'] as Array<string>;
-    if (allowedRoles && allowedRoles.includes(user.role)) {
+    
+    // Allow access to the generic dashboard regardless of role.
+    if (state.url.startsWith('/dashboard')) {
       return true;
     }
-
-    // If role doesn't match, you might redirect to a "not authorized" page.
-    this.router.navigate(['/login']);
-    return false;
+    
+    // For routes with role restrictions, check if user's role is allowed.
+    const allowedRoles = route.data?.['roles'] as string[] | undefined;
+    if (allowedRoles) {
+      if (user.role && allowedRoles.includes(user.role)) {
+        return true;
+      } else {
+        // Redirect to dashboard if role does not match.
+        this.router.navigate(['/dashboard']);
+        return false;
+      }
+    }
+    
+    return true;
   }
 }

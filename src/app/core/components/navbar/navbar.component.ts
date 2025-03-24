@@ -25,10 +25,9 @@ export class NavbarComponent implements OnInit {
     // Subscribe to notifications
     this.notifService.notifications$.subscribe(notif => {
       this.notifications.push(notif);
-      // Optionally, limit the number of notifications or auto-clear after a delay.
     });
     
-    // Start a simulated notification for demo purposes
+    // Optionally, start simulated notifications:
     this.notifService.simulateNotification();
   }
 

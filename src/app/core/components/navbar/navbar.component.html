@@ -23,7 +23,6 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/admin">Admin Panel</a>
           </li>
-          <!-- You can add additional Admin links as needed -->
         </ng-container>
 
         <!-- Warehouse Manager-specific links -->
@@ -56,23 +55,22 @@
           </li>
         </ng-container>
       </ul>
-      <!-- Notifications area -->
-      <div class="position-relative me-3">
-        <button class="btn btn-outline-light" (click)="toggleNotifications()">
-          Notifications <span class="badge bg-danger">{{ notifications.length }}</span>
-        </button>
-        <div class="notifications-dropdown position-absolute bg-white p-2 shadow" 
-              *ngIf="showNotifications" 
-              style="right: 0; top: 40px; width: 300px; z-index: 1000;">
-          <div *ngFor="let notif of notifications" class="alert alert-{{notif.type}} m-1 p-1">
-            <small>{{ notif.message }}<br>{{ notif.timestamp | date:'shortTime' }}</small>
+      <div class="d-flex align-items-center">
+        <div class="position-relative me-3">
+          <button class="btn btn-outline-light" (click)="toggleNotifications()">
+            Notifications <span class="badge bg-danger">{{ notifications.length }}</span>
+          </button>
+          <div class="notifications-dropdown position-absolute bg-white p-2 shadow" 
+               *ngIf="showNotifications" 
+               style="right: 0; top: 40px; width: 300px; z-index: 1000;">
+            <div *ngFor="let notif of notifications" class="alert alert-{{notif.type}} m-1 p-1">
+              <small>{{ notif.message }}<br>{{ notif.timestamp | date:'shortTime' }}</small>
+            </div>
           </div>
         </div>
+        <span class="navbar-text me-3">{{ user?.email }}</span>
+        <button class="btn btn-outline-light" (click)="logout()">Logout</button>
       </div>
-      <span class="navbar-text me-3">
-        {{ user?.email }}
-      </span>
-      <button class="btn btn-outline-light" (click)="logout()">Logout</button>
     </div>
   </div>
 </nav>

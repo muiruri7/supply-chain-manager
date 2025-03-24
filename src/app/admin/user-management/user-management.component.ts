@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { UserService, User } from '../services/user.service';
+import { UserService, User } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-user-management',
@@ -14,13 +14,11 @@ export class UserManagementComponent implements OnInit {
   editUserForm: FormGroup;
 
   constructor(private userService: UserService, private fb: FormBuilder) {
-    // Form for adding a new user
     this.addUserForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       role: ['', Validators.required]
     });
 
-    // Form for editing a user
     this.editUserForm = this.fb.group({
       id: [''],
       email: ['', [Validators.required, Validators.email]],
@@ -29,13 +27,20 @@ export class UserManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Subscribe to user data changes
     this.userService.users$.subscribe(users => {
       this.users = users;
     });
   }
 
-  // Add new user
+  // Getters for the edit form controls
+  get editEmailControl(): FormControl {
+    return this.editUserForm.get('email') as FormControl;
+  }
+
+  get editRoleControl(): FormControl {
+    return this.editUserForm.get('role') as FormControl;
+  }
+
   onAddUser(): void {
     if (this.addUserForm.valid) {
       const newUser: User = this.addUserForm.value;
@@ -44,39 +49,27 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
-  // Start editing a user
   onEditUser(user: User): void {
     this.editingUser = user;
     this.editUserForm.patchValue(user);
   }
 
-  // Save the edited user
   onSaveEdit(): void {
-    if (this.editUserForm.valid) {
+    if (this.editUserForm.valid && this.editingUser) {
       const updatedUser: User = this.editUserForm.value;
       this.userService.updateUser(updatedUser);
       this.cancelEdit();
     }
   }
 
-  // Cancel editing
   cancelEdit(): void {
     this.editingUser = null;
     this.editUserForm.reset();
   }
 
-  // Delete a user
   onDeleteUser(userId: number): void {
     if (confirm('Are you sure you want to delete this user?')) {
       this.userService.deleteUser(userId);
     }
-  }
-
-  get editEmailControl(): FormControl {
-    return this.editUserForm.get('email') as FormControl;
-  }
-  
-  get editRoleControl(): FormControl {
-    return this.editUserForm.get('role') as FormControl;
   }
 }

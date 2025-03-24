@@ -17,10 +17,10 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router
   ) {
+    // Remove the role control from the login form.
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      role: ['', Validators.required],
       rememberMe: [false]
     });
   }
@@ -29,10 +29,11 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      const { email, password, role, rememberMe } = this.loginForm.value;
-      const success = this.authService.login(email, password, role, rememberMe);
+      const { email, password, rememberMe } = this.loginForm.value;
+      const success = this.authService.login(email, password, rememberMe);
       if (success) {
-        // Redirect to dashboard after successful login.
+        // After login, the AuthService returns the registered user (with role)
+        // Now navigate to the generic dashboard.
         this.router.navigate(['/dashboard']);
       } else {
         this.errorMessage = 'Invalid credentials. Please try again.';
