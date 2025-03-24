@@ -4,39 +4,50 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-  private storageKey = 'scm_user';
+  // Key for storing the array of registered users
+  private registeredUsersKey = 'scm_users';
+  // Key for storing the currently logged-in user
+  private currentUserStorageKey = 'scm_user';
 
-  // Simulated login - in a real app, you'd call an API here.
+  // Simulated login: compares the entered password with the stored password.
   login(email: string, password: string, rememberMe: boolean = false): boolean {
-    // Retrieve the registered users from storage (an array)
-    const registeredUsers = JSON.parse(localStorage.getItem('scm_users') || '[]');
-    // Find the user by email (password validation is omitted in this demo)
+    // Retrieve the array of registered users
+    const registeredUsers = JSON.parse(localStorage.getItem(this.registeredUsersKey) || '[]');
+    // Find the user by email
     const user = registeredUsers.find((u: any) => u.email === email);
-    if (user) {
-      // Store the logged-in user (with role) in session or local storage
+    if (user && user.password === password) {
+      // Remove the password before storing the current user data for security
+      const { password, ...userWithoutPassword } = user;
       const storage = rememberMe ? localStorage : sessionStorage;
-      storage.setItem('scm_user', JSON.stringify(user));
+      storage.setItem(this.currentUserStorageKey, JSON.stringify(userWithoutPassword));
       return true;
     }
     return false;
   }
 
-  // Simulated registration.
+  // Simulated registration: adds the new user to the registered users array.
   register(email: string, password: string, role: string): boolean {
-    // Save the user data in localStorage for demo purposes.
-    // In a real app, this data would be sent to a backend.
-    const userData = { email, role };
-    localStorage.setItem(this.storageKey, JSON.stringify(userData));
+    // Retrieve the current array of registered users (or empty array if none exist)
+    const registeredUsers = JSON.parse(localStorage.getItem(this.registeredUsersKey) || '[]');
+    
+    // Optionally, check if a user with the same email already exists
+    if (registeredUsers.some((u: any) => u.email === email)) {
+      return false; // Registration fails if email is already registered
+    }
+    
+    const newUser = { email, password, role };
+    registeredUsers.push(newUser);
+    localStorage.setItem(this.registeredUsersKey, JSON.stringify(registeredUsers));
     return true;
   }
 
   logout(): void {
-    localStorage.removeItem(this.storageKey);
-    sessionStorage.removeItem(this.storageKey);
+    localStorage.removeItem(this.currentUserStorageKey);
+    sessionStorage.removeItem(this.currentUserStorageKey);
   }
 
   getUser(): any {
-    const userData = localStorage.getItem(this.storageKey) || sessionStorage.getItem(this.storageKey);
+    const userData = localStorage.getItem(this.currentUserStorageKey) || sessionStorage.getItem(this.currentUserStorageKey);
     return userData ? JSON.parse(userData) : null;
   }
 

@@ -16,12 +16,14 @@ export class UserManagementComponent implements OnInit {
   constructor(private userService: UserService, private fb: FormBuilder) {
     this.addUserForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
       role: ['', Validators.required]
     });
 
     this.editUserForm = this.fb.group({
       id: [''],
       email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
       role: ['', Validators.required]
     });
   }
@@ -39,6 +41,11 @@ export class UserManagementComponent implements OnInit {
 
   get editRoleControl(): FormControl {
     return this.editUserForm.get('role') as FormControl;
+  }
+
+
+  get editPasswordControl(): FormControl {
+    return this.editUserForm.get('password') as FormControl;
   }
 
   onAddUser(): void {

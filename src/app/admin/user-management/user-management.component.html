@@ -16,6 +16,13 @@
           </div>
         </div>
         <div class="mb-3">
+          <label for="newPassword" class="form-label">Password</label>
+          <input id="newPassword" type="password" formControlName="password" class="form-control" placeholder="Enter password">
+          <div *ngIf="addUserForm.get('password')?.touched && addUserForm.get('password')?.invalid" class="text-danger">
+            <small>Password is required</small>
+          </div>
+        </div>
+        <div class="mb-3">
           <label for="newRole" class="form-label">Role</label>
           <select id="newRole" formControlName="role" class="form-select">
             <option value="">Select a role</option>
@@ -39,12 +46,13 @@
       <tr>
         <th>Email</th>
         <th>Role</th>
+        <th>Password</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let user of users">
-        <!-- If editing this user, show edit fields -->
+        <!-- Editing mode -->
         <ng-container *ngIf="editingUser?.id === user.id; else viewMode">
           <td>
             <input type="email" class="form-control" [formControl]="editEmailControl">
@@ -58,15 +66,19 @@
             </select>
           </td>
           <td>
+            <input type="password" class="form-control" [formControl]="editPasswordControl" placeholder="Enter new password">
+          </td>
+          <td>
             <button class="btn btn-sm btn-success me-2" (click)="onSaveEdit()">Save</button>
             <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">Cancel</button>
           </td>
         </ng-container>
 
-        <!-- View mode for users -->
+        <!-- View mode -->
         <ng-template #viewMode>
           <td>{{ user.email }}</td>
           <td>{{ user.role }}</td>
+          <td>********</td>
           <td>
             <button class="btn btn-sm btn-primary me-2" (click)="onEditUser(user)">Edit</button>
             <button class="btn btn-sm btn-danger" (click)="onDeleteUser(user.id)">Delete</button>
